@@ -2,7 +2,7 @@
 
 A simple script in Go language to automatically update Digital ocean DNS records if you have a dynamic IP. Since it can be compiled on any platform, you can use it along with raspberrypi etc.
 
-To find your Dynamic IP, this program will call out to https://ipv4bot.whatismyipaddress.com for ipv4 addresses and https://ipv6bot.whatismyipaddress.com for ipv6 addresses. This is to support dual-stack environments. (These URLs can be customized; see Usage, below.)
+To find your Dynamic IP, this program will call out to https://ipv4bot.whatismyipaddress.com for ipv4 addresses ~~and https://ipv6bot.whatismyipaddress.com for ipv6 addresses. This is to support dual-stack environments.~~ *Removing ipv6 as the site isn't working.* (These URLs can be customized; see Usage, below.)
 
 ## Requirements
 
@@ -12,18 +12,20 @@ To find your Dynamic IP, this program will call out to https://ipv4bot.whatismyi
 
 ## Installation
 
-Download the prebuilt binaries from [releases](https://github.com/anaganisk/digitalocean-dynamic-dns-ip/releases),
+**SETUP ASSUMES ALL IS RUN FROM ROOT**
+
+~~Download the prebuilt binaries from [releases](https://github.com/anaganisk/digitalocean-dynamic-dns-ip/releases),
 
 or Build from source
 
 ```bash
 # Requires Git, Go 1.8+(GO 1.11 if you want to use GO111MODULE=on).
 # clone the repo in ~/go/src/github.com/anaganisk:
-git clone https://github.com/anaganisk/digitalocean-dynamic-dns-ip.git
+git clone https://github.com/mikeo85/digitalocean-dynamic-dns-ip.git
 # Skip to next step, if you have GO111MODULE=on in your environment it is fetched automatically
 go get github.com/mitchellh/go-homedir
 # build the project
-go build
+go build /digitalocean-dynamic-dns-ip/digitalocean-dynamic-ip.go
 ```
 
 ## Usage
@@ -73,15 +75,15 @@ The `allowIPv4InIPv6` configuration option will allow adding an IPv4 address to 
 The `ipv4CheckUrl` and `ipv6CheckUrl` configuration settings are optional. If set, they must be URLs which respond to a GET request, with a plaintext response containing only your IP address. If unset, they default to `https://ipv_bot.whatismyipaddress.com`.
 
 ```bash
-# after running `go build digitalocean-dynamic-ip.go`, run:
-./digitalocean-dynamic-ip
+# after running the `go build` command above, run:
+/digitalocean-dynamic-dns-ip/digitalocean-dynamic-ip
 ```
 
 Optionally, you can create the configuration file with any name wherever you want, and pass it as a command line argument:
 
 ```bash
 #run:
-./digitalocean-dynamic-ip /path/to/my/config.json
+/digitalocean-dynamic-dns-ip/digitalocean-dynamic-ip /path/to/my/config.json
 ```
 
 You can either set this to run periodically with a cronjob or use your own method.
@@ -91,5 +93,5 @@ You can either set this to run periodically with a cronjob or use your own metho
 # sample cron job task
 
 # m h  dom mon dow   command
-*/5 * * * * /home/user/digitalocean-dynamic-dns-ip/digitalocean-dynamic-ip
+*/5 * * * * /digitalocean-dynamic-dns-ip/digitalocean-dynamic-ip
 ```
