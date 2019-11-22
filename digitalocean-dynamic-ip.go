@@ -125,8 +125,8 @@ func CheckLocalIPs() (ipv4, ipv6 net.IP) {
 	if len(config.IPv4CheckURL) > 0 {
 		ipv4CheckURL = config.IPv4CheckURL
 	}
-	if len(config.IPv6CheckURL) > 0 {
-		ipv6CheckURL = config.IPv6CheckURL
+//	if len(config.IPv6CheckURL) > 0 {
+//		ipv6CheckURL = config.IPv6CheckURL
 	}
 
 	if config.UseIPv4 == nil || *(config.UseIPv4) {
@@ -146,20 +146,20 @@ func CheckLocalIPs() (ipv4, ipv6 net.IP) {
 		}
 	}
 
-	if config.UseIPv6 == nil || *(config.UseIPv6) {
-		ipv6String, _ = getURLBody(ipv6CheckURL)
-		if ipv6String == "" {
-			log.Println("No IPv6 address found. Consider disabling IPv6 checks in the config `\"useIPv6\": false`")
-		} else {
-			ipv6 = net.ParseIP(ipv6String)
-			if ipv6 == nil {
-				log.Printf("Unable to parse `%s` as an IPv6 address", ipv6String)
-			} else {
-				log.Printf("Discovered IPv6 address `%s`", ipv6.String())
-			}
-		}
-	}
-	return ipv4, ipv6
+//	if config.UseIPv6 == nil || *(config.UseIPv6) {
+//		ipv6String, _ = getURLBody(ipv6CheckURL)
+//		if ipv6String == "" {
+//			log.Println("No IPv6 address found. Consider disabling IPv6 checks in the config `\"useIPv6\": false`")
+//		} else {
+//			ipv6 = net.ParseIP(ipv6String)
+//			if ipv6 == nil {
+//				log.Printf("Unable to parse `%s` as an IPv6 address", ipv6String)
+//			} else {
+//				log.Printf("Discovered IPv6 address `%s`", ipv6.String())
+//			}
+//		}
+//	}
+	return ipv4//, ipv6
 }
 
 func getURLBody(url string) (string, error) {
@@ -299,31 +299,31 @@ func UpdateRecords(domain Domain, ipv4, ipv6 net.IP) {
 // notation (127.0.0.1) even if we convert it using net.IP.To16().
 // For AAAA records, we can't have that. Instead, force the
 // IP to have the IPv6 colon notation.
-func toIPv6String(ip net.IP) (currentIP string) {
-	if ip == nil {
-		return ""
-	}
-	if ipv4 := ip.To4(); ipv4 != nil {
-		ip = ipv4
-	}
-	l := len(ip)
-	if l < 16 {
-		// ensure "v4InV6Prefix" for IPv4 addresses
-		currentIP = "::ffff:"
-	}
-	// byte length of an ipv6 segment.
-	segSize := 2
-	for i := 0; i < l; i += segSize {
-		end := i + segSize
-		bs := ip[i:end]
-		addColon := (end + 1) < l
-		currentIP += hex.EncodeToString(bs)
-		if addColon {
-			currentIP += ":"
-		}
-	}
-	return currentIP
-}
+//func toIPv6String(ip net.IP) (currentIP string) {
+//	if ip == nil {
+//		return ""
+//	}
+//	if ipv4 := ip.To4(); ipv4 != nil {
+//		ip = ipv4
+//	}
+//	l := len(ip)
+//	if l < 16 {
+//		// ensure "v4InV6Prefix" for IPv4 addresses
+//		currentIP = "::ffff:"
+//	}
+//	// byte length of an ipv6 segment.
+//	segSize := 2
+//	for i := 0; i < l; i += segSize {
+//		end := i + segSize
+//		bs := ip[i:end]
+//		addColon := (end + 1) < l
+//		currentIP += hex.EncodeToString(bs)
+//		if addColon {
+//			currentIP += ":"
+//		}
+//	}
+//	return currentIP
+//}
 
 func areZero(bs []byte) bool {
 	for _, b := range bs {
